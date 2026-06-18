@@ -2,7 +2,6 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFacePipeline, ChatHuggingFace
 from langchain_core.prompts import PromptTemplate
-
 load_dotenv()
 
 # Load TinyLlama locally
