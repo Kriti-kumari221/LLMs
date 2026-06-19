@@ -1,0 +1,18 @@
+from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
+from typing import TypedDict, Annotated,Optional
+load_dotenv()
+#litral is used for pos like pos pos neg nutral
+#Using anotation ai can read the sentence and they can understand well 
+model=ChatOpenAI()
+class Review(TypedDict):
+    key_themes: Annotated[list[str],"Wright down all the key thems disscused in the review"]
+    summary:Annotated[str,"A brief summary of the review"]
+    sentiment:Annotated[str,"Return sentiment of the review eigher negative, positive or neutral"]
+    pros:Annotated[Optional[list[str]],"Wright down all the pros inside a list"]
+    cons:Annotated[Optional[list[str]],"Wright down all the pros inside a list"]
+structures_model=model.with_structured_output(Review)
+result=structures_model.invoke("the hardware is great, but the software feels bloted.")
+print(result)
+print(result['summary'])
+print(result['sentiment'])
