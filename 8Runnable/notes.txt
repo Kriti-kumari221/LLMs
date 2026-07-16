@@ -1,0 +1,2 @@
+made a component for all type of work 
+helpwe classes like pdf load split embedded remier vector llm parse 
