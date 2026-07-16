@@ -1,0 +1,16 @@
+Text Based prompt
+Multimodel Prompts (image sound video )
+Static ,Dynamic Prompt 
+
+Prompt template 
+it create in structure way prokpt dynamicly by inserting template allows you to define placeholder that can be filled in at runtime with different inputs
+
+why use prompt template over F string?
+Default validation resuable
+langchain ecosystem 
+
+invoke:- Single message 2 list of message 
+signle message :-static ,Dynamic(prompt template)
+list of message:- static(System message, humman message, ai message), Dynamic 
+message placeholder:-  used inside chatPromptTemplate to dynamicily insert chat History or a list of message at runtimes
+what ever chat history we have we put in placeholder of cht 

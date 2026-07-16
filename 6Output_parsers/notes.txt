@@ -1,0 +1,15 @@
+output parser :- works with those model which is not having structutre output by default 
+in structure output we have work with with structure 
+
+string output parser
+json output parser
+structutr parser 
+[pyandintic output ]
+
+json output parser dosnot inforse schema 
+we have to use structutre output and we have to dsend schema inforse 
+we can't do data validation in structure output 
+Pydantic Oputput parser 
+Strict schema , type safely , Easy validation, seamless integration |
+
+
