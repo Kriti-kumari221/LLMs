@@ -1,0 +1,90 @@
+LangChain LLM Notes - Chapter 2
+
+Topic: Embeddings and Semantic Search
+
+1. What are Embeddings?
+
+Embeddings are dense numerical vectors representing the semantic meaning
+of text. Texts with similar meanings have vectors close together.
+
+Uses: - Semantic search - RAG - Recommendation systems - Clustering -
+Duplicate detection - Document retrieval
+
+2. OpenAIEmbeddings
+
+Create embeddings using OpenAI embedding models.
+
+Typical model: text-embedding-3-large
+
+Important parameters: - model - dimensions (optional to reduce vector
+size)
+
+Methods: - embed_query(text): returns one vector. -
+embed_documents(list_of_text): returns one vector per document.
+
+3. HuggingFaceEmbeddings
+
+Generates embeddings locally or from Hugging Face models.
+
+Example model: sentence-transformers/all-MiniLM-L6-v2
+
+Advantages: - Free - Local execution - No OpenAI API required (after
+model download)
+
+4. Query vs Document Embeddings
+
+embed_query() - Single search query. - Returns one vector.
+
+embed_documents() - Multiple documents. - Returns list of vectors.
+
+5. Semantic Similarity
+
+Workflow: 1. Convert documents into embeddings. 2. Convert user query
+into embedding. 3. Compute cosine similarity. 4. Highest similarity =
+best matching document.
+
+Cosine similarity ranges: 1.0 = identical direction 0 = unrelated -1 =
+opposite direction
+
+Used heavily in RAG systems.
+
+6. Vector Dimensions
+
+A vector may contain hundreds or thousands of floating-point values.
+Reducing dimensions lowers storage and computation but may reduce
+accuracy.
+
+7. Common Pipeline
+
+Text -> Embedding Model -> Vector -> Vector Database
+(FAISS/Chroma/Pinecone) -> Similarity Search -> Retrieved Context -> LLM
+
+8. Common Mistakes Seen
+
+-   model=‘test-embeddings-3-large’ should be text-embedding-3-large.
+-   Parameter is dimensions, not dimmension.
+-   After similarity calculation, use argmax() or sort in descending
+    order to retrieve the most similar document.
+
+9. Interview Questions
+
+Q. What is an embedding? A numeric representation of text meaning.
+
+Q. Why embeddings? To compare meaning instead of exact keywords.
+
+Q. Difference between embed_query and embed_documents? Single query vs
+multiple documents.
+
+Q. Why cosine similarity? It compares vector direction and is widely
+used for semantic similarity.
+
+Q. Which LangChain class creates OpenAI embeddings? OpenAIEmbeddings
+
+Q. Which class creates local embeddings? HuggingFaceEmbeddings
+
+10. Files Covered
+
+-   OpenAI embed_query
+-   OpenAI embed_documents
+-   HuggingFaceEmbeddings
+-   Cosine similarity based document retrieval

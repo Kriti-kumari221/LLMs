@@ -1,2 +1,15 @@
 made a component for all type of work 
 helpwe classes like pdf load split embedded remier vector llm parse 
+problem becoming many result get confuse for all components 
+har ek function ke liye likhna prta tha jb component match nahi ho rhe the standraze ho to use kiya runnable this is the solution 
+unit of work :- input process outpt
+common component 
+invoke(), batch(), stream() we can connect both 
+R1->R2->R3-> this workflow is it self a runnable 
+Task Specific runnables:- task specific llm calls 
+Runnable primitivess:-
+runnable sequence 
+runnable parllel
+runnable map
+
+

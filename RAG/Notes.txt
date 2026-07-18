@@ -1,0 +1,19 @@
+RAG:- ia a technique combines information retrivals with language generation where a model retrives relevent document from a knowledge base an dthen users them as context to generate accurate and grounded response ?
+use to update info 
+better privacy 
+no limitt of documnt size 
+
+Document loder :- TextLoader PyPDFLoader WebBaseLoader CSVLoader
+Load vs Lazy Load 
+loads everyhting at once 
+return list document obj
+load all document immedietly into memory 
+
+lazy load()
+load on demand 
+a generator of document object 
+not all loaded at once 
+
+
+Text_Splitting 
+larg_text to Chuncks so that LLM can understand 

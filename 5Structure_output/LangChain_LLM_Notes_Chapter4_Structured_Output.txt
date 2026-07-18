@@ -1,0 +1,176 @@
+LangChain LLM Master Notes
+
+Chapter 4 – Structured Output, TypedDict, Pydantic & JSON Schema
+
+This chapter explains every concept used in the uploaded files.
+
+  ---------------------------
+  1. Why Structured Output?
+  ---------------------------
+
+Normally an LLM returns free-form text.
+
+Example: “The laptop is good but expensive.”
+
+This is difficult for applications because the output format changes.
+
+Structured Output forces the model to return data in a predefined
+schema.
+
+Example:
+
+{ “summary”:“Good laptop”, “sentiment”:“positive”, “pros”:[“Fast”],
+“cons”:[“Expensive”] }
+
+This makes it easy to store in databases, APIs, dashboards and RAG
+pipelines.
+
+  -------------------
+  2. Libraries Used
+  -------------------
+
+langchain_openai.ChatOpenAI - Connects LangChain with OpenAI chat
+models.
+
+dotenv.load_dotenv() - Loads API keys from .env.
+
+typing.TypedDict - Defines the expected dictionary structure.
+
+typing.Annotated - Adds descriptions/metadata for fields. - LangChain
+uses these descriptions to guide the LLM.
+
+typing.Optional - Field may contain None.
+
+pydantic.BaseModel - Data validation library. - Automatically validates
+and converts data.
+
+EmailStr - Ensures a valid email.
+
+Field() - Adds validation rules and descriptions.
+
+  --------------
+  3. TypedDict
+  --------------
+
+TypedDict defines the expected keys and value types of a dictionary.
+
+Example: class Person(TypedDict): name:str age:int
+
+Benefits - Better type checking - IDE autocomplete - Structured
+outputs - Cleaner code
+
+TypedDict DOES NOT validate data at runtime.
+
+  --------------
+  4. Annotated
+  --------------
+
+Annotated[type, description]
+
+Example
+
+summary: Annotated[str,“Brief summary”]
+
+The description is shown to the LLM so it understands exactly what to
+generate.
+
+Without Annotated: summary:str
+
+With Annotated: summary:Annotated[str,“Brief summary”]
+
+Much better structured responses.
+
+  ------------------------------------------------------------
+  5. Optional
+  ------------------------------------------------------------
+  6. Structured Output in LangChain
+
+  model = ChatOpenAI()
+
+  structured_model = model.with_structured_output(Review)
+
+  Now instead of normal text,
+
+  invoke()
+
+  returns
+
+  { key_themes:[], summary:““, sentiment:”“, pros:[], cons:[]
+  }
+
+  The LLM automatically fills every field.
+  ------------------------------------------------------------
+
+7.  Review Schema Explained
+
+key_themes List of important topics.
+
+summary Short explanation.
+
+sentiment positive / negative / neutral
+
+pros Advantages.
+
+cons Disadvantages.
+
+  ------------------------------------------------------------
+  8. Pydantic
+  ------------------------------------------------------------
+  9. EmailStr
+
+  Accepts
+
+  abc@gmail.com
+
+  Rejects
+
+  abcgmail
+  ------------------------------------------------------------
+
+10. Field()
+
+Field( gt=0, lt=10, description=“CGPA” )
+
+gt = greater than
+
+lt = less than
+
+CGPA must satisfy
+
+0 < cgpa < 10
+
+  ------------------------------------------------------------
+  11. JSON Schema
+  ------------------------------------------------------------
+  12. Flow
+
+  User Review ↓ ChatOpenAI ↓ with_structured_output() ↓
+  TypedDict Schema ↓ LLM ↓ Python Dictionary
+  ------------------------------------------------------------
+
+13. TypedDict vs Pydantic
+
+TypedDict - Type hints - No runtime validation - Lightweight
+
+Pydantic - Runtime validation - Automatic conversion - Better for APIs -
+Raises validation errors
+
+  ------------------------------------------------------------
+  14. Common Mistakes
+  ------------------------------------------------------------
+  15. Interview Questions
+
+  1. What is structured output? 2. Why use TypedDict? 3.
+  Difference between TypedDict and BaseModel? 4. Why
+  Annotated? 5. Why Optional? 6. What does
+  with_structured_output() do? 7. Why JSON Schema? 8. Why use
+  EmailStr? 9. What is Field()? 10. When should you use
+  Pydantic instead of TypedDict?
+  ------------------------------------------------------------
+
+16. Files Covered
+
+-   Structured output using TypedDict and with_structured_output()
+-   TypedDict basics
+-   Pydantic BaseModel
+-   JSON Schema

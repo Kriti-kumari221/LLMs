@@ -1,15 +1,169 @@
-output parser :- works with those model which is not having structutre output by default 
-in structure output we have work with with structure 
+LangChain LLM Master Notes
 
-string output parser
-json output parser
-structutr parser 
-[pyandintic output ]
+Chapter 5 – Output Parsers (Complete Guide)
 
-json output parser dosnot inforse schema 
-we have to use structutre output and we have to dsend schema inforse 
-we can't do data validation in structure output 
-Pydantic Oputput parser 
-Strict schema , type safely , Easy validation, seamless integration |
+================================================= 1. What is an Output
+Parser? =================================================
 
+LLMs normally return plain text.
 
+Example: “The capital of India is New Delhi.”
+
+Applications often need structured data instead of free text.
+
+Output Parsers convert raw LLM responses into structured Python objects
+such as: - String - JSON - Dictionary - Pydantic Object
+
+================================================= 2. Why Output Parsers?
+=================================================
+
+Without Output Parser
+
+User ↓ LLM ↓ Text ↓ Developer manually extracts data
+
+With Output Parser
+
+User ↓ LLM ↓ Output Parser ↓ Python Object
+
+Benefits: • Consistent output • Easier parsing • Less manual work •
+Better API integration • Safer applications
+
+================================================= 3. Libraries Used
+=================================================
+
+dotenv.load_dotenv() - Loads API keys.
+
+langchain_huggingface.HuggingFaceEndpoint - Connects to Hugging Face
+hosted models.
+
+ChatHuggingFace - Chat wrapper around Hugging Face models.
+
+PromptTemplate - Creates reusable prompts.
+
+JsonOutputParser - Converts model output into JSON.
+
+StructuredOutputParser - Enforces a response schema.
+
+ResponseSchema - Defines expected fields for StructuredOutputParser.
+
+PydanticOutputParser - Returns validated Pydantic objects.
+
+BaseModel - Creates validation schema.
+
+Field - Adds validation rules and descriptions.
+
+================================================= 4. Types of Output
+Parsers =================================================
+
+1.  StringOutputParser Returns plain text.
+
+2.  JsonOutputParser Returns JSON/dictionary. ✔ Easy to use ✘ Does NOT
+    enforce schema.
+
+3.  StructuredOutputParser Uses ResponseSchema. ✔ Expected keys ✔ Better
+    structured output ✘ Limited validation
+
+4.  PydanticOutputParser Uses BaseModel. ✔ Strict schema ✔ Type safety ✔
+    Runtime validation ✔ Automatic conversion ✔ Best choice
+
+================================================= 5. JsonOutputParser
+=================================================
+
+parser = JsonOutputParser()
+
+Adds formatting instructions to the prompt.
+
+The model is instructed to return valid JSON.
+
+Important: It DOES NOT validate data types.
+
+================================================= 6.
+StructuredOutputParser =================================================
+
+ResponseSchema( name=“Fact_1”, description=“First fact” )
+
+Multiple ResponseSchemas create a fixed response structure.
+
+parser.get_format_instructions()
+
+automatically inserts formatting instructions into the prompt.
+
+================================================= 7.
+PydanticOutputParser =================================================
+
+class Person(BaseModel): name:str age:int city:str
+
+parser = PydanticOutputParser(…)
+
+Advantages: • Validation • Type conversion • Errors on invalid data •
+Returns Person object
+
+================================================= 8. PromptTemplate +
+partial_variables =================================================
+
+partial_variables={ “format_instructions”:
+parser.get_format_instructions() }
+
+This automatically injects parser instructions into the prompt.
+
+No need to write JSON format manually.
+
+================================================= 9. LCEL Chain
+=================================================
+
+template | model | parser
+
+Flow
+
+PromptTemplate ↓ Chat Model ↓ Output Parser ↓ Python Object
+
+This is LangChain Expression Language (LCEL).
+
+================================================= 10. Manual Chaining
+=================================================
+
+Some files demonstrate:
+
+Prompt ↓ LLM ↓ Prompt ↓ LLM
+
+This is manual chaining.
+
+LCEL is cleaner.
+
+================================================= 11. Which Parser
+Should You Use?
+
+Simple text → StringOutputParser
+
+Need JSON → JsonOutputParser
+
+Need fixed keys → StructuredOutputParser
+
+Need validation → PydanticOutputParser
+
+================================================= 12. Common Mistakes
+
+• JsonOutputParser does not validate schema. • StructuredOutputParser
+organizes fields but is not a full validator. • PydanticOutputParser
+requires a valid BaseModel. • Always include
+parser.get_format_instructions() in prompts.
+
+================================================= 13. Interview
+Questions
+
+1.  What is an Output Parser?
+2.  Why use Output Parsers?
+3.  Difference between JsonOutputParser and StructuredOutputParser?
+4.  Difference between StructuredOutputParser and PydanticOutputParser?
+5.  What is ResponseSchema?
+6.  What is parser.get_format_instructions()?
+7.  Why use partial_variables?
+8.  What is LCEL chaining?
+9.  Which parser performs runtime validation?
+10. Which parser returns a Pydantic object?
+
+================================================= 14. Files Covered
+
+• JsonOutputParser • StructuredOutputParser • ResponseSchema •
+PydanticOutputParser • PromptTemplate + partial_variables • LCEL
+(template | model | parser) • Manual chaining example

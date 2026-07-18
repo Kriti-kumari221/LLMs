@@ -1,0 +1,124 @@
+LangChain LLM Notes (Chapter 1)
+
+These notes are based on the uploaded examples using OpenAI, Anthropic,
+Google Gemini, and Hugging Face.
+
+1. What is an LLM?
+
+A Large Language Model (LLM) is an AI model trained on huge amounts of
+text to understand and generate human language.
+
+Examples: - OpenAI GPT - Anthropic Claude - Google Gemini - Hugging Face
+Models (TinyLlama, Mistral, Llama, etc.)
+
+2. Why LangChain?
+
+LangChain provides one common interface to work with different LLM
+providers.
+
+Benefits: - Switch providers easily. - Prompt management. - Chains. -
+Memory. - RAG. - Agents. - Tool calling.
+
+3. Environment Variables
+
+Use:
+
+from dotenv import load_dotenv load_dotenv()
+
+Store API keys inside a .env file instead of hardcoding them.
+
+Examples: OPENAI_API_KEY=… ANTHROPIC_API_KEY=… GOOGLE_API_KEY=…
+HUGGINGFACEHUB_API_TOKEN=…
+
+4. OpenAI (ChatOpenAI)
+
+Main class: ChatOpenAI()
+
+Example parameters: - model - temperature - max_completion_tokens
+
+Temperature: 0.0 -> deterministic 0.5 -> balanced 1.0+ -> creative
+
+invoke(prompt) sends one request and returns an AIMessage.
+
+5. Anthropic (ChatAnthropic)
+
+Wrapper: ChatAnthropic()
+
+Example: model=“claude-3.5-sonnet-20241022”
+
+Used exactly like ChatOpenAI.
+
+6. Google Gemini
+
+Wrapper: ChatGoogleGenerativeAI()
+
+Example: model=“gemini-1.5-pro”
+
+Again, invoke() works the same way.
+
+7. Hugging Face (Hosted Endpoint)
+
+Classes: HuggingFaceEndpoint ChatHuggingFace
+
+Flow: Prompt -> ChatHuggingFace -> HuggingFaceEndpoint -> Hosted Model
+-> AIMessage
+
+8. Hugging Face (Local Pipeline)
+
+Classes: HuggingFacePipeline ChatHuggingFace
+
+Advantages: - Runs locally. - No internet after model download. - Better
+privacy. - Faster repeated inference.
+
+HF_HOME changes cache directory.
+
+9. Common LangChain Pattern
+
+1.  Import wrapper
+2.  load_dotenv() (if API key required)
+3.  Create model
+4.  invoke(prompt)
+5.  Read response.content
+
+10. invoke()
+
+Returns an AIMessage object.
+
+Use: response.content
+
+instead of printing the entire object.
+
+11. Common Parameters
+
+temperature max_completion_tokens / max_new_tokens model repo_id task
+
+12. Interview Questions
+
+Q. Why LangChain? A. One framework for multiple LLM providers.
+
+Q. Why use .env? A. Secure API key storage.
+
+Q. Difference between Endpoint and Pipeline? Endpoint -> cloud hosted.
+Pipeline -> local inference.
+
+Q. What does invoke() return? AIMessage.
+
+Q. Why ChatHuggingFace? It gives the same chat interface as other
+LangChain providers.
+
+13. Corrections from Uploaded Code
+
+-   Use temperature (not tempratures).
+-   Prefer print(response.content).
+-   Prompt typo: “What is you nake” should be “What is your name?”
+
+14. Files Covered
+
+-   ChatOpenAI
+-   ChatAnthropic
+-   ChatGoogleGenerativeAI
+-   HuggingFaceEndpoint + ChatHuggingFace
+-   HuggingFacePipeline + ChatHuggingFace
+
+This chapter builds the foundation for learning prompts, PromptTemplate,
+output parsers, chains, RAG, memory, and agents.

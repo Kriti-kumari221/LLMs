@@ -1,0 +1,168 @@
+LangChain Master Notes
+
+Chapter 6 - LCEL (LangChain Expression Language), Runnable Chains, Parallel & Branch
+
+1. What is LCEL?
+
+LCEL (LangChain Expression Language) is a declarative way to connect
+LangChain components using the pipe operator |.
+
+Instead of manually calling each step:
+
+Prompt -> LLM -> Parser
+
+you write:
+
+chain = prompt | model | parser
+
+Benefits: - Readable - Modular - Reusable - Easy debugging - Supports
+sequential, parallel and conditional execution.
+
+------------------------------------------------------------------------
+
+2. Libraries Used
+
+langchain_core.prompts.PromptTemplate - Creates reusable prompts.
+
+langchain_core.output_parsers.StrOutputParser - Converts model output
+into plain string.
+
+langchain_core.output_parsers.PydanticOutputParser - Parses and
+validates output using a Pydantic model.
+
+langchain_core.runnables.RunnableParallel - Executes multiple chains
+simultaneously.
+
+langchain_core.runnables.RunnableBranch - Executes different chains
+based on conditions.
+
+langchain_huggingface.HuggingFacePipeline - Runs local Hugging Face
+models.
+
+langchain_openai.ChatOpenAI - OpenAI chat wrapper.
+
+pydantic.BaseModel / Field - Schema validation.
+
+typing.Literal - Restricts a field to specific values.
+
+------------------------------------------------------------------------
+
+3. Sequential Chain
+
+Example flow:
+
+Topic ↓ Prompt 1 ↓ LLM ↓ Report ↓ Prompt 2 ↓ LLM ↓ Summary
+
+Equivalent LCEL:
+
+prompt1 | llm | prompt2 | llm | parser
+
+Use case: - Report → Summary - Translation → Explanation - OCR →
+Summarization
+
+------------------------------------------------------------------------
+
+4. RunnableParallel
+
+Purpose: Run independent tasks at the same time.
+
+Example:
+
+Input Text | ———————– | | Notes Chain Quiz Chain | | ——– Merge ——– |
+Final Document
+
+Advantages: - Faster execution - Better utilization - Independent
+subtasks
+
+Typical applications: - Notes + MCQs - Summary + Keywords -
+Translation + Sentiment
+
+------------------------------------------------------------------------
+
+5. RunnableBranch
+
+Purpose: Conditionally route execution.
+
+Example:
+
+Feedback | Classifier | Positive? —- Yes –> Thank-you prompt | No |
+Apology prompt
+
+Fallback: Unknown sentiment.
+
+This is similar to an if-else statement.
+
+------------------------------------------------------------------------
+
+6. Pydantic in Branching
+
+The classifier returns:
+
+sentiment: - positive - negative
+
+Literal[“positive”,“negative”] guarantees only valid values.
+
+------------------------------------------------------------------------
+
+7. StrOutputParser
+
+Converts the raw LLM output into a Python string.
+
+Use when structured output is not required.
+
+------------------------------------------------------------------------
+
+8. chain.get_graph()
+
+Visualizes the execution graph.
+
+Useful for: - Debugging - Understanding execution flow - Documentation
+
+------------------------------------------------------------------------
+
+9. Manual Pipeline vs LCEL
+
+Without LCEL: 1. Format prompt 2. Call model 3. Parse output 4. Build
+second prompt 5. Call model again 6. Parse output
+
+With LCEL:
+
+prompt | llm | prompt | llm | parser
+
+Much shorter and easier to maintain.
+
+------------------------------------------------------------------------
+
+10. Common Mistakes Found
+
+-   input_variable should be input_variables.
+-   chain.invoke({‘text’:‘text’}) passes the literal word “text”; pass
+    the variable instead.
+-   ChatHuggingFace import is unused in some examples.
+-   Use get_graph().print_ascii() to inspect chain structure.
+
+------------------------------------------------------------------------
+
+11. Interview Questions
+
+1.  What is LCEL?
+2.  Why use the pipe operator (|)?
+3.  RunnableParallel vs RunnableBranch?
+4.  Sequential vs Parallel execution?
+5.  Why use StrOutputParser?
+6.  What does chain.get_graph() do?
+7.  When should RunnableBranch be used?
+8.  Benefits of LCEL over manual code?
+9.  Why use Literal in a Pydantic model?
+10. Explain the report → summary pipeline.
+
+------------------------------------------------------------------------
+
+12. Files Covered
+
+-   Basic LCEL chain
+-   Sequential report-to-summary chain
+-   RunnableParallel
+-   RunnableBranch
+-   Sentiment classification with branching
+-   Graph visualization

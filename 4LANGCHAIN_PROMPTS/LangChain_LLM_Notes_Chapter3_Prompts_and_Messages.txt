@@ -1,0 +1,155 @@
+LangChain LLM Master Notes
+
+Chapter 3 : Prompts, PromptTemplate, ChatPromptTemplate & Messages
+
+These notes are based on all uploaded prompt-related files.
+
+1. What is a Prompt?
+
+A prompt is the instruction given to an LLM.
+
+Types - Text Prompt - Multimodal Prompt (image/audio/video) - Static
+Prompt - Dynamic Prompt
+
+User notes: Text Based prompt Multimodel Prompts (image sound video )
+Static ,Dynamic Prompt
+
+Prompt template it create in structure way prokpt dynamicly by inserting
+template allows you to define placeholder that can be filled in at
+runtime with different inputs
+
+why use prompt template over F string? Default validation resuable
+langchain ecosystem
+
+invoke:- Single message 2 list of message signle message :-static
+,Dynamic(prompt template) list of message:- static(System message,
+humman message, ai message), Dynamic message placeholder:- used inside
+chatPromptTemplate to dynamicily insert chat History or a list of
+message at runtimes what ever chat history we have we put in placeholder
+of cht
+
+hii am you ds,mfnsdf,n
+
+2. Why Prompt Engineering?
+
+A better prompt produces a better answer without changing the model.
+
+Good prompts specify: - Role - Task - Context - Constraints - Output
+format
+
+Example: “You are a Python teacher. Explain recursion with one example.”
+
+3. PromptTemplate
+
+Library: from langchain_core.prompts import PromptTemplate
+
+Purpose: Creates reusable prompts using placeholders.
+
+Instead of f-strings: f”Explain {topic}”
+
+Use: PromptTemplate(template=“Explain {topic}”,
+input_variables=[“topic”])
+
+Advantages over f-strings - Input validation - Reusable - Cleaner code -
+Easy integration with LangChain chains - Safer variable substitution
+
+Important APIs - format() - invoke()
+
+4. ChatPromptTemplate
+
+Library: from langchain_core.prompts import ChatPromptTemplate
+
+Unlike PromptTemplate, it creates chat messages instead of one text
+block.
+
+Supports roles: - system - human - ai
+
+Example workflow: System -> Defines assistant behaviour Human -> User
+question AI -> Previous response (optional)
+
+5. Message Classes
+
+Library: from langchain_core.messages import ( SystemMessage,
+HumanMessage, AIMessage )
+
+SystemMessage: Controls personality and rules.
+
+HumanMessage: Represents user input.
+
+AIMessage: Stores assistant responses and chat history.
+
+6. MessagePlaceholder
+
+Library: from langchain_core.prompts import MessagesPlaceholder
+
+Purpose: Dynamically injects previous chat history into
+ChatPromptTemplate.
+
+Useful for: - Chatbots - Memory - Multi-turn conversations
+
+Flow: Previous Messages ↓ MessagesPlaceholder ↓ Current Question ↓ LLM
+
+7. invoke()
+
+invoke(“hello”) Single string
+
+invoke(messages) List of messages
+
+Both return AIMessage.
+
+8. Chat History
+
+Typical workflow
+
+SystemMessage ↓ HumanMessage ↓ AIMessage ↓ HumanMessage ↓ AIMessage
+
+Appending AI responses keeps conversation context.
+
+9. Streamlit Integration
+
+Libraries - streamlit - PromptTemplate - ChatHuggingFace -
+HuggingFacePipeline
+
+Typical flow
+
+User selects options ↓ PromptTemplate.format() ↓ model.invoke() ↓
+Display response
+
+10. Library Reference
+
+dotenv - load environment variables
+
+langchain_core.prompts - PromptTemplate - ChatPromptTemplate -
+MessagesPlaceholder
+
+langchain_core.messages - SystemMessage - HumanMessage - AIMessage
+
+langchain_openai - ChatOpenAI
+
+langchain_huggingface - ChatHuggingFace - HuggingFacePipeline
+
+streamlit - Build web UI
+
+11. Common Errors Found
+
+-   MessagePlaceholder should be MessagesPlaceholder.
+-   HummanMessage should be HumanMessage.
+-   chat_history.extend(f.read()) extends character by character.
+    Better: chat_history = f.readlines() or parse saved messages.
+-   Maintain chat history as message objects.
+
+12. Interview Questions
+
+1.  Difference between PromptTemplate and ChatPromptTemplate?
+2.  Why use SystemMessage?
+3.  Why use MessagesPlaceholder?
+4.  Difference between format() and invoke()?
+5.  Why PromptTemplate over f-string?
+6.  What is chat history?
+7.  How does LangChain preserve conversation context?
+8.  Difference between HumanMessage and AIMessage?
+
+13. Learning Summary
+
+Prompt ↓ PromptTemplate / ChatPromptTemplate ↓ Messages ↓ invoke() ↓ LLM
+↓ AIMessage ↓ Chat History

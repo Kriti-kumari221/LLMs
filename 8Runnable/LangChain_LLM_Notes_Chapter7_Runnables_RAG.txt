@@ -1,0 +1,151 @@
+LangChain Master Notes
+
+Chapter 7 – Runnables, RunnableLambda, RunnablePassthrough, Legacy Chains & RAG Pipeline
+
+1. Why Runnables?
+
+Early LangChain had many incompatible components: - PromptTemplate -
+LLM - Embeddings - Vector Stores - Retrievers - Parsers
+
+Connecting them manually was difficult.
+
+Runnables introduced one standard interface.
+
+Every Runnable supports: - invoke() - batch() - stream()
+
+Even a complete chain is itself a Runnable.
+
+2. Runnable = Unit of Work
+
+Input ↓ Processing ↓ Output
+
+Anything following this pattern can become a Runnable.
+
+3. Runnable Types
+
+-   RunnableSequence
+-   RunnableParallel
+-   RunnableBranch
+-   RunnableLambda
+-   RunnablePassthrough
+- 
+4. RunnableLambda
+
+Purpose: Wrap any normal Python function so it becomes part of an AI
+pipeline.
+
+Example: def word_counter(text): return len(text.split())
+
+RunnableLambda(word_counter)
+
+Use cases: - Preprocessing - Cleaning text - Post-processing - Feature
+engineering
+
+5. RunnablePassthrough
+
+Returns input unchanged.
+
+Input ↓ RunnablePassthrough ↓ Same Input
+
+Useful when one branch needs the original input while another branch
+transforms it.
+
+6. RunnableSequence
+
+Executes tasks one after another.
+
+Prompt → Model → Parser
+
+Equivalent to: prompt | model | parser
+
+7. RunnableParallel
+
+Runs independent tasks simultaneously.
+
+Example: Topic ├── Tweet └── LinkedIn Post
+
+Outputs are merged into one dictionary.
+
+8. Legacy LLMChain
+
+Older syntax:
+
+chain = LLMChain(llm=llm, prompt=prompt)
+
+Modern LCEL:
+
+prompt | model | parser
+
+LCEL is preferred because it is more flexible and composable.
+
+9. Understanding the ‘Fake’ Implementation
+
+The uploaded educational example recreates: - Runnable -
+PromptTemplate - LLMChain
+
+to explain how LangChain works internally.
+
+Concept: PromptTemplate formats input, LLM generates output, Chain
+connects both.
+
+10. Manual RAG Pipeline
+
+Flow:
+
+TextLoader ↓ RecursiveCharacterTextSplitter ↓ OpenAIEmbeddings ↓ FAISS
+Vector Store ↓ Retriever ↓ Relevant Chunks ↓ Prompt ↓ LLM ↓ Answer
+
+Libraries: - TextLoader - RecursiveCharacterTextSplitter -
+OpenAIEmbeddings - FAISS - OpenAI
+
+11. Text Splitter
+
+Splits large documents into chunks.
+
+Parameters: chunk_size chunk_overlap
+
+Overlap preserves context between chunks.
+
+12. FAISS
+
+Facebook AI Similarity Search.
+
+Stores vectors and performs nearest-neighbor search efficiently.
+
+13. Retriever
+
+retriever.get_relevant_documents(query)
+
+Returns only the most relevant chunks instead of the entire document.
+
+14. Common Mistakes Found
+
+-   input_variable should be input_variables.
+-   random.choise() should be random.choice().
+-   formate() should be format().
+-   RunnablePassThrough should be RunnablePassthrough.
+-   RunnableConnector class names inconsistent.
+-   ChatOpenAI/OpenAI imports mixed in some files.
+
+15. Interview Questions
+
+1.  What is a Runnable?
+2.  Why were Runnables introduced?
+3.  RunnableSequence vs RunnableParallel?
+4.  What does RunnablePassthrough do?
+5.  When should RunnableLambda be used?
+6.  Explain the manual RAG pipeline.
+7.  Why use chunk_overlap?
+8.  What is FAISS?
+9.  Difference between LLMChain and LCEL?
+10. Why is every chain itself a Runnable?
+
+16. Files Covered
+
+-   RunnableLambda concept
+-   RunnablePassthrough
+-   RunnableSequence
+-   RunnableParallel
+-   Legacy LLMChain
+-   Internal implementation of Runnable/Chain
+-   Manual RAG pipeline using FAISS
