@@ -81,3 +81,52 @@ on the basis of  data Sourse  (wikipedia retievers , Vector Re, Arxiv , )
 on the basis of search (MMR, Mutliquery,Compression re)
 
 Wikipedia Retiever:- A wikipedia Retiever is a retiever that queries the wikipedia API o fetch relevent content for a given query 
+
+
+more retrives we have like BM23Retriver
+ParentDocumentRetriver
+TimeWeightedVectorRetriver
+SelfQueryRetriever
+EnsembleRetriver
+MultivectorRetriver
+ArxivRetriver
+
+we have coverd the Components of RAG no we move to the RAG Concept 
+python.langchain.com/docs/integrations/retrievers/
+
+WHY?
+we pretrain LLM  llm store the data in parameters 
+we have now llm but how can we acces the data as a user ans is by prompting 
+most of the situation this works in right ways but somtime we cant get the best response 
+if we use private data then we can't get the ans because this has not been traind on the private data or pretrained 
+and some senerio is hallusinuation they can imagin anythoing according to theair understanding 
+then give anything as a ans 
+
+we do solution this kind of problem use FineTuning 
+we want that model should have a our private data knowledge also so we use fine tuning 
+
+student:- LLM
+Engneering:- pretrain
+Training in compny:- FineTuning 
+
+FineTuning:- 
+Superwised fine tuning :- we provide label dataset 
+
+Continued Pretaind:- Unsuperwised (as feeding transcipt )
+RLHF:- How to behave in real world example 
+
+1. Collect data
+2. Choose a method (full parameter, LoRa/QLoRA,parameter effect Adapter,)
+3. train for a few epoch:- 
+Evaluate & Safety-test
+
+problem:-
+computationaly extensive 
+strong techinal experiense 
+if update for more time then it's deficult to manage 
+
+In context Learning to solve these problem 
+model learn using example and all and prompt without adapting weights.
+or we called it as Fewshot learning 
+
+
