@@ -129,4 +129,34 @@ In context Learning to solve these problem
 model learn using example and all and prompt without adapting weights.
 or we called it as Fewshot learning 
 
+An emergent property :- is a behavior or ability that suddenly appers in a system when it reches a certain scale or complexity --even though it was not explictly programmed or expected from the individual components
 
+GP# can learn (papers "Language models are few Shot Learners(173 billion para) in context learning 
+
+
+RAG is a way to make a language model (like ChatGPT) Smarter by giving it extra information at the time you ask your questinos
+
+Understanding RAG 
+
+we do it in 4 step 
+1 indexing
+2 retrivals
+3 Augmentation
+4 Generation
+
+the process of making External knowledge (Context) that is called Indexing 
+
+we stunderand the Query first then we go to external knowledge then wetry to find the query clue that is called retrivals 
+
+When we make a promt using Query and context that is called Augmentation
+
+when this prompt reach to LLm then it use context learning that is called Generation 
+
+Indexing:- 
+Document Ungestion :- you load your source knowledge into memory 
+Text Chunking:- Break larg docs into small semantically meaningful chunks 
+Embeddings Generation:- Convert Each chunk into dense vector (embeddings) that captures its meaning 
+Store in a vector Stor:- Store the vectors along with the original text + metadata in a vector databse  (lacal :- FAISS, Chroma , Cloud:-Pipecone,Weaviate,Qdrant)
+
+![alt text](image.png)
+![alt text](image-1.png)

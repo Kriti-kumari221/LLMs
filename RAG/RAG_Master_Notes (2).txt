@@ -1,0 +1,99 @@
+LANGCHAIN MASTER HANDBOOK
+
+VOLUME 1 : RETRIEVAL AUGMENTED GENERATION (RAG)
+
+================================================= 1. WHAT IS RAG?
+=================================================
+
+RAG (Retrieval Augmented Generation) is an AI architecture that
+combines:
+
+1.  Information Retrieval
+2.  Large Language Model Generation
+
+Instead of relying only on the model’s internal knowledge, RAG retrieves
+relevant documents from an external knowledge base and uses them as
+context before generating an answer.
+
+Why RAG? - Solves hallucination - Uses private/company documents -
+Supports frequently updated knowledge - Avoids expensive retraining -
+Handles very large document collections
+
+================================================= 2. WHY RAG IS NEEDED
+=================================================
+
+Problems with LLMs - Knowledge cutoff - Hallucinations - No access to
+private data - Limited context window
+
+Solutions - Fine-tuning - RAG
+
+Fine-tuning changes model weights. RAG keeps model weights unchanged and
+supplies external context.
+
+================================================= 3. COMPLETE RAG
+PIPELINE =================================================
+
+Documents ↓ Document Loader ↓ Text Splitter ↓ Embeddings ↓ Vector Store
+↓ Retriever ↓ Relevant Chunks ↓ Prompt Augmentation ↓ LLM ↓ Final Answer
+
+================================================= 4. INDEXING
+================================================= Step 1 : Load
+documents Step 2 : Split into chunks Step 3 : Generate embeddings Step 4
+: Store vectors + metadata
+
+================================================= 5. RETRIEVAL
+================================================= User Query ↓ Embedding
+↓ Similarity Search ↓ Top-K Relevant Chunks
+
+================================================= 6. AUGMENTATION
+================================================= Query + Retrieved
+Context → Prompt
+
+================================================= 7. GENERATION
+================================================= Prompt + Context → LLM
+→ Accurate Response
+
+================================================= 8. DOCUMENT LOADERS
+================================================= TextLoader PyPDFLoader
+CSVLoader WebBaseLoader DirectoryLoader
+
+load() - Loads everything into memory.
+
+lazy_load() - Generator based - Better for huge datasets.
+
+================================================= 9. EMBEDDINGS
+================================================= Embeddings convert
+text into dense vectors.
+
+Popular models - OpenAI - BGE - E5 - Instructor - HuggingFace
+
+================================================= 10. VECTOR STORES
+================================================= Local - FAISS - Chroma
+
+Cloud - Pinecone - Weaviate - Qdrant
+
+Store: - vectors - metadata - original text
+
+================================================= 11. RETRIEVERS
+================================================= Vector Retriever
+Wikipedia Retriever Arxiv Retriever MMR Retriever MultiQuery Retriever
+Compression Retriever ParentDocument Retriever SelfQuery Retriever
+Ensemble Retriever
+
+================================================= 12. FINE-TUNING VS RAG
+=================================================
+
+Fine-tuning - Expensive - Changes weights - Slow updates
+
+RAG - Cheap - Dynamic knowledge - No retraining - Production friendly
+
+================================================= 13. REAL WORLD
+APPLICATIONS ================================================= Chatbots
+Medical AI Legal Search Company Knowledge Base Research Assistant
+Document QA Customer Support
+
+================================================= 14. INTERVIEW
+QUESTIONS ================================================= 1. What is
+RAG? 2. Explain Indexing. 3. Explain Retrieval. 4. Explain Augmentation.
+5. Explain Generation. 6. Fine-tuning vs RAG? 7. Why Embeddings? 8. Why
+Vector Store? 9. Why Retriever? 10. Explain complete RAG architecture.

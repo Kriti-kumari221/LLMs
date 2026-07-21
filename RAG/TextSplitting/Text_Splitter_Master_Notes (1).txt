@@ -1,0 +1,87 @@
+LANGCHAIN MASTER HANDBOOK
+
+TEXT SPLITTER MASTER NOTES
+
+================================================= WHY TEXT SPLITTING?
+=================================================
+
+LLMs cannot process extremely large documents efficiently.
+
+Large documents are divided into small chunks.
+
+Benefits: - Better retrieval - Lower token usage - Faster embedding
+generation - Improved semantic search
+
+================================================= TYPES OF TEXT
+SPLITTERS =================================================
+
+1.  CharacterTextSplitter
+
+-   Splits by characters.
+-   Can break words.
+-   Simple but not recommended.
+
+2.  RecursiveCharacterTextSplitter
+
+-   Recommended default.
+-   Tries separators in order: Paragraph ↓ Line ↓ Sentence ↓ Word ↓
+    Character
+
+Preserves context much better.
+
+3.  TokenTextSplitter
+
+-   Splits using model tokens.
+-   Best when respecting model token limits.
+
+4.  SemanticChunker
+
+-   Uses embeddings.
+-   Splits where topic changes.
+-   Highest quality chunks.
+
+================================================= IMPORTANT PARAMETERS
+=================================================
+
+chunk_size Maximum chunk size.
+
+chunk_overlap Shared text between adjacent chunks.
+
+separator Preferred split character.
+
+================================================= split_text() vs
+split_documents() =================================================
+
+split_text() Input: String
+
+split_documents() Input: LangChain Document objects Use for PDFs, DOCX,
+webpages etc.
+
+================================================= HOW TO CHOOSE CHUNK
+SIZE =================================================
+
+Small chunks + Fast retrieval - Less context
+
+Large chunks + More context - Higher token cost
+
+Typical values
+
+200-400 tokens : QA 500-1000 : RAG 1000+ : Summarization
+
+================================================= COMMON MISTAKES
+=================================================
+
+-   Chunk size too large
+-   Zero overlap everywhere
+-   Using CharacterTextSplitter for complex PDFs
+-   Ignoring semantic boundaries
+
+================================================= INTERVIEW QUESTIONS
+=================================================
+
+1.  Why split documents?
+2.  Character vs Recursive splitter?
+3.  What is Semantic Chunking?
+4.  Why chunk_overlap?
+5.  split_text vs split_documents?
+6.  Which splitter is best for RAG?

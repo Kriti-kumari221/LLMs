@@ -1,0 +1,129 @@
+LANGCHAIN MASTER NOTES CHAPTER 8 - ADVANCED RETRIEVERS
+
+This chapter is based on notebooks covering: • Chroma Retriever • MMR
+Retriever • MultiQuery Retriever • Contextual Compression Retriever •
+Wikipedia Retriever
+
+==================================================== 1. WHY DO WE NEED
+ADVANCED RETRIEVERS?
+====================================================
+
+A simple similarity retriever searches for the nearest embeddings to a
+user’s query. Although it works well, it has several limitations:
+
+1.  It may return many nearly identical documents.
+2.  A user’s question may be phrased differently from the stored
+    documents.
+3.  Long retrieved documents often contain irrelevant information.
+4.  Some questions require external knowledge instead of your own vector
+    database.
+
+LangChain provides specialized retrievers to solve each of these
+problems.
+
+  ----------------------------------------------------
+  2. CHROMA RETRIEVER
+  ----------------------------------------------------
+  Chroma is a lightweight vector database.
+
+  Workflow: Documents -> Embeddings -> Chroma ->
+  Retriever -> Top-k similar chunks
+
+  Use: retriever =
+  vectorstore.as_retriever(search_kwargs={“k”:2})
+
+  Best for local RAG development.
+  ----------------------------------------------------
+
+3. MMR (Maximum Marginal Relevance)
+
+Problem: Similarity search may return five documents saying almost the
+same thing.
+
+MMR balances: • Relevance to the query • Diversity among results
+
+It removes redundant documents and increases coverage.
+
+Use: search_type=“mmr”
+
+Parameters: k -> returned documents fetch_k -> initial candidates
+lambda_mult 1.0 = only relevance 0.0 = only diversity
+
+  ----------------------------------------------------
+  4. MULTI QUERY RETRIEVER
+  ----------------------------------------------------
+  Different users ask the same thing differently.
+
+  Example: “What is AI?” “Explain Artificial
+  Intelligence.” “How do intelligent machines work?”
+
+  MultiQueryRetriever asks the LLM to generate several
+  alternative queries, runs retrieval for all of them,
+  merges the results and removes duplicates.
+
+  Advantages: • Better recall • Finds hidden documents
+  • Reduces ambiguity
+
+  Disadvantages: • More LLM calls • Slightly slower
+  ----------------------------------------------------
+
+5. CONTEXTUAL COMPRESSION RETRIEVER
+
+Sometimes retrieved documents are very large.
+
+Instead of sending the entire document to the LLM, a compressor removes
+irrelevant sentences while keeping only information needed to answer the
+user’s query.
+
+Benefits: • Lower token cost • Faster inference • Better answers •
+Smaller prompts
+
+  ----------------------------------------------------
+  6. WIKIPEDIA RETRIEVER
+  ----------------------------------------------------
+  Instead of searching your own vector database,
+  WikipediaRetriever fetches fresh information from
+  Wikipedia.
+
+  Example: retriever =
+  WikipediaRetriever(top_k_results=2)
+
+  Useful for: • Current facts • Public knowledge •
+  Research assistants
+
+  Not suitable for: • Private company documents •
+  Confidential data
+  ----------------------------------------------------
+
+7.  WHICH RETRIEVER SHOULD YOU USE?
+
+Similarity - Fast - General semantic search
+
+MMR - Avoid duplicate chunks
+
+MultiQuery - Different wording of same question
+
+Compression - Very long retrieved documents
+
+Wikipedia - Public external knowledge
+
+  ----------------------------------------------------
+  8. INTERVIEW QUESTIONS
+
+  1. Why is similarity retrieval not enough? 2.
+  Explain MMR. 3. MMR vs Similarity Search. 4. Why use
+  MultiQueryRetriever? 5. What is Contextual
+  Compression? 6. What does a compressor do? 7.
+  Explain WikipediaRetriever. 8. Which retriever would
+  you use for enterprise RAG? 9. Can retrievers be
+  combined? 10. Difference between Vector Store and
+  Retriever?
+  ----------------------------------------------------
+
+9.  BEST PRACTICES
+
+• Use RecursiveCharacterTextSplitter before retrieval. • Choose
+embeddings carefully. • Tune k and fetch_k. • Prefer MMR for diverse
+datasets. • Use Compression for long documents. • Use MultiQuery when
+user wording varies. • Use WikipediaRetriever only for public
+information.

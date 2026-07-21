@@ -1,0 +1,135 @@
+LANGCHAIN MASTER HANDBOOK VOLUME 2 - DOCUMENT LOADERS (DETAILED NOTES)
+
+========================================================= INTRODUCTION
+=========================================================
+
+Imagine you have thousands of PDFs, text files, CSVs, Word documents and
+web pages. An LLM cannot automatically read files stored on your
+computer. It only understands text that is passed to it.
+
+The responsibility of a Document Loader is to open a data source,
+extract its text, and convert it into LangChain Document objects.
+
+Without a loader there is nothing to split, embed, index, or retrieve.
+
+Typical RAG Pipeline
+
+Files | v Document Loader | v Document Objects | v Text Splitter | v
+Embeddings | v Vector Store | v Retriever | v LLM
+
+========================================================= LANGCHAIN
+DOCUMENT OBJECT
+=========================================================
+
+Every loader returns a Document object.
+
+It contains: 1. page_content -> Actual extracted text. 2. metadata ->
+Information like source, page number, filename, etc.
+
+Example
+
+Document( page_content=“This is the content…”, metadata={
+“source”:“book.pdf”, “page”:2 } )
+
+========================================================= TEXTLOADER
+=========================================================
+
+Purpose: Reads plain text (.txt) files.
+
+When to use: - Notes - Logs - Articles - Books stored as text
+
+Workflow: Text File -> TextLoader -> Document -> Splitter -> Embeddings
+
+Important methods
+
+load() Loads the entire file into memory.
+
+lazy_load() Loads documents one by one. Preferred for very large
+datasets.
+
+Advantages - Very fast - Simple - Low memory usage
+
+Disadvantages - Only works with text files.
+
+========================================================= PYPDFLOADER
+=========================================================
+
+Purpose: Extracts text page-by-page from PDF files.
+
+Each page becomes one Document object.
+
+Advantages - Page metadata available - Excellent for digital PDFs
+
+Limitations - Scanned PDFs contain images instead of text. - OCR is
+required for scanned documents.
+
+Alternatives - PDFPlumberLoader (better tables) - UnstructuredPDFLoader
+(complex layouts)
+
+========================================================= CSVLOADER
+=========================================================
+
+Purpose: Converts each CSV row into a Document.
+
+Useful for: - Sales reports - Customer datasets - Product catalogs
+
+Each row becomes searchable after embeddings are created.
+
+=========================================================
+DIRECTORYLOADER
+=========================================================
+
+Purpose: Loads many files from one folder.
+
+Example use cases: - Thousands of PDFs - Documentation folders - Company
+knowledge bases
+
+Useful parameters: path glob loader_cls
+
+========================================================= WEBBASELOADER
+=========================================================
+
+Purpose: Reads content from public websites.
+
+Internally uses: - requests - BeautifulSoup
+
+Best for: - Blogs - Documentation - Public articles
+
+Not ideal for: - JavaScript-heavy websites - Login-protected pages
+
+For dynamic websites consider Selenium or Playwright based loaders.
+
+========================================================= LOAD VS
+LAZY_LOAD =========================================================
+
+load() - Loads everything immediately. - Easy to use. - Higher memory
+usage.
+
+lazy_load() - Generator based. - Reads one document at a time. - Better
+for production systems.
+
+========================================================= BEST PRACTICES
+=========================================================
+
+-   Use TextLoader for .txt files.
+-   Use PyPDFLoader for digital PDFs.
+-   Use CSVLoader for tabular data.
+-   Use DirectoryLoader for folders.
+-   Use WebBaseLoader only for publicly accessible pages.
+-   Clean documents before embedding.
+-   Split documents before generating embeddings.
+
+========================================================= COMMON
+INTERVIEW QUESTIONS
+=========================================================
+
+1.  What is a Document Loader?
+2.  Why do we need loaders in RAG?
+3.  What does page_content contain?
+4.  What is metadata?
+5.  Difference between load() and lazy_load()?
+6.  TextLoader vs PyPDFLoader?
+7.  Why does PyPDFLoader fail on scanned PDFs?
+8.  When should you use DirectoryLoader?
+9.  How does WebBaseLoader work?
+10. Explain the complete document loading pipeline.
