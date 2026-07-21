@@ -17,3 +17,67 @@ not all loaded at once
 
 Text_Splitting 
 larg_text to Chuncks so that LLM can understand 
+
+
+it match the keyword 
+is two movi similar or not rather than matching keywork we use plot 
+we use embeding as a angular distance if distance is high then similarity is low 
+and same vice versa 
+we use vector to calculate cosine simalarity 
+for evey document we need to store in vector 
+and we cant store  it on mysql or oracal we can t store if we store then we can calcult/e the similarity
+and computational we also be high so we need intelligent symantic search 
+so we face this challange so the ans is vectore store to build this kind of problem 
+
+system design to store and retrive representation as numerical 
+
+key features 
+store 
+memory 
+similarity search 
+Indexing 
+CRUD Operation 
+
+use case 
+sementi c search 
+RAG
+Recommender system 
+Image/Multimedia Search 
+
+Image ultimedia :- to search somthing it takes much time like sort search so to solve this we use indexing concept nad clustring 
+we compare with centroid and given vector then we focuse on only centroid then go into deep dive after calculating the similarity with centroid .
+we can perfome CRUD operation also using this 
+
+Vector Store Vs Vector Database 
+vector store :- typically refers to a lightweight library or services that focus on storing vectors and performing similarity search 
+
+may not include many traditional database features like translations rich query language or role based access control 
+
+ideal for prototyping sammler scale applications 
+Example FAISS where you store vector and can query them by similarity but not handle persistence and scale 
+
+Vector Database:
+A full fledge database system designed to store and query vectors 
+offers additional database like features 
+distributed architecture for horizonal scaling 
+vector databse is effectively a vector store with extra database features e.g clustring scalling security, metadata , filletring, and durability 
+
+vectore stire in langchain 
+supported Stores: Langchain integrate with multiple vector stores FAISS , PineCone , Chroma, Qdrant, Weaviate  giving you flexibility in scale, features , and development 
+
+common interface A unicorn vectore API lets you swap out one backend FAISS for another with minimal code changes 
+Chroma Vector Store :-
+Chroma is lightweight open sourse database that is especily friendly for local development and small to medium scale production 
+
+top lavel (user)Tanent ->Database (multiple collection , doc metadata embedings  ), Database
+
+
+Retirevrs
+data source->Retirver (Query)->document it try to find from the data which is most relevent to the data and after that it fetch  as a input it take user query and output it gives the relevent result
+there are multiple retrievers 
+all are runnables 
+types of reterievers:
+on the basis of  data Sourse  (wikipedia retievers , Vector Re, Arxiv , )
+on the basis of search (MMR, Mutliquery,Compression re)
+
+Wikipedia Retiever:- A wikipedia Retiever is a retiever that queries the wikipedia API o fetch relevent content for a given query 
