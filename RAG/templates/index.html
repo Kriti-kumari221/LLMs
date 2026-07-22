@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>YouTube AI Chatbot</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+            --bg: #0a0c10;
+        --panel: #12151b;
+        --panel-alt: #191d25;
+        --input-bg: #1c212b;
+        --border: #262b35;
+        --accent: #e8443b;
+        --accent-dim: #7a2723;
+        --accent-2: #3ddc97;
+        --text: #f4f5f7;
+        --text-muted: #868c96;
+        --text-faint: #565c66;
+        --radius: 14px;
+    }
+ 
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+ 
+    html{ color-scheme: dark; }
+ 
+    body{
+        background:
+            radial-gradient(ellipse 900px 550px at 50% -12%, rgba(232,68,59,0.14), transparent 60%),
+            radial-gradient(ellipse 700px 500px at 100% 100%, rgba(61,220,151,0.06), transparent 60%),
+            var(--bg);
+        color: var(--text);
+        font-family: 'Inter', Arial, sans-serif;
+        min-height: 100vh;
+        display:flex;
+        align-items:flex-start;
+        justify-content:center;
+        padding: 48px 20px;
+    }
+ 
+    /* ---- Frame with film-sprocket rails: the signature element ---- */
+    .frame{
+        width:100%;
+        max-width: 860px;
+        display:grid;
+        grid-template-columns: 18px 1fr 18px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+        overflow:hidden;
+    }
+ 
+    .sprockets{
+        background: repeating-linear-gradient(
+            to bottom,
+            #05060a 0px, #05060a 10px,
+            transparent 10px, transparent 22px
+        );
+        position: relative;
+    }
+    .sprockets::before{
+        content:"";
+        position:absolute;
+        inset:0;
+        background-image: radial-gradient(circle at 50% 16px, #000 3.5px, transparent 3.6px);
+        background-size: 18px 22px;
+        background-repeat: repeat-y;
+        opacity: 0.9;
+    }
+ 
+    .container{
+        padding: 26px 36px 28px;
+        min-width: 0;
+    }
+ 
+    /* ---- Marquee bulb row ---- */
+    .marquee{
+        display:flex;
+        justify-content: center;
+        gap: 9px;
+        margin-bottom: 22px;
+    }
+    .marquee span{
+        width:6px; height:6px;
+        border-radius:50%;
+        background: var(--border);
+        box-shadow: 0 0 0 rgba(232,68,59,0);
+        animation: chase 2.4s ease-in-out infinite;
+        animation-delay: calc(var(--i) * 0.12s);
+    }
+    @keyframes chase{
+        0%, 100%{ background: var(--border); box-shadow:none; }
+        50%{ background: var(--accent); box-shadow: 0 0 8px 1px rgba(232,68,59,0.8); }
+    }
+ 
+    /* ---- Header ---- */
+    .masthead{
+        display:flex;
+        align-items:baseline;
+        justify-content:center;
+        gap:10px;
+        margin-bottom: 6px;
+    }
+ 
+    h1{
+        font-family: 'Bebas Neue', 'Inter', sans-serif;
+        font-size: 42px;
+        letter-spacing: 3px;
+        font-weight: 400;
+        line-height: 1;
+        background: linear-gradient(100deg, #ffffff 0%, #ffe8e6 45%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+ 
+    .live-dot{
+        width:9px; height:9px;
+        border-radius:50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 0 rgba(232,68,59,0.6);
+        animation: pulse 2s infinite;
+        flex-shrink:0;
+        align-self:center;
+    }
+ 
+    @keyframes pulse{
+        0%   { box-shadow: 0 0 0 0 rgba(232,68,59,0.55); }
+        70%  { box-shadow: 0 0 0 9px rgba(232,68,59,0); }
+        100% { box-shadow: 0 0 0 0 rgba(232,68,59,0); }
+    }
+ 
+    .tagline{
+        text-align:center;
+        color: var(--text-muted);
+        font-size: 13.5px;
+        margin-bottom: 26px;
+        letter-spacing: 0.2px;
+    }
+ 
+    /* ---- Video loader row ---- */
+    .video-box{
+        display:flex;
+        gap:10px;
+        margin-bottom: 14px;
+    }
+ 
+    .video-box input{
+        flex:1;
+        min-width:0;
+        padding: 13px 16px;
+        font-size: 14.5px;
+        font-family: 'JetBrains Mono', monospace;
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 9px;
+        transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .video-box input::placeholder{ color: var(--text-faint); }
+    .video-box input:focus-visible{
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(232,68,59,0.18);
+    }
+ 
+    .btn{
+        padding: 13px 22px;
+        border:none;
+        border-radius: 9px;
+        cursor:pointer;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        font-family: 'Inter', sans-serif;
+        transition: transform .1s ease, background .15s ease, opacity .15s ease;
+        white-space:nowrap;
+    }
+    .btn:active{ transform: scale(0.97); }
+    .btn:disabled{ opacity:0.5; cursor:not-allowed; }
+    .btn:focus-visible{ outline: 2px solid var(--text); outline-offset: 2px; }
+ 
+    .btn-load{
+        background: var(--accent);
+        color: #fff;
+    }
+    .btn-load:hover:not(:disabled){ background:#d13a31; }
+ 
+    .btn-send{
+        background: var(--accent-2);
+        color: #06231a;
+    }
+    .btn-send:hover:not(:disabled){ background:#33c489; }
+ 
+    /* ---- Status / loader strip ---- */
+    #status-row{
+        min-height: 22px;
+        margin-bottom: 18px;
+    }
+ 
+    .status-line{
+        display:flex;
+        align-items:center;
+        gap:9px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.2px;
+    }
+    .status-line.ok{ color: var(--accent-2); }
+    .status-line.err{ color: var(--accent); }
+ 
+    .reel{
+        width:13px; height:13px;
+        border-radius:50%;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        animation: spin .8s linear infinite;
+        flex-shrink:0;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+ 
+    .thumb{
+        display:flex;
+        align-items:center;
+        gap:12px;
+    }
+    .thumb img{
+        width:64px; height:36px;
+        object-fit:cover;
+        border-radius:5px;
+        border: 1px solid var(--border);
+    }
+ 
+    /* ---- Chat / caption track ---- */
+    .chat-box{
+        height: 420px;
+        overflow-y:auto;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 18px;
+        background: var(--panel-alt);
+        display:flex;
+        flex-direction:column;
+        gap: 14px;
+    }
+    .chat-box:empty::before{
+        content: "Load a video, then ask anything about it — answers come straight from the transcript.";
+        color: var(--text-faint);
+        font-size: 13.5px;
+        margin: auto;
+        text-align:center;
+        max-width: 320px;
+        display:block;
+    }
+    .chat-box::-webkit-scrollbar{ width: 8px; }
+    .chat-box::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 8px; }
+ 
+    .row{
+        display:flex;
+        flex-direction:column;
+        max-width: 78%;
+        animation: rise .25s ease;
+    }
+    @keyframes rise{
+        from{ opacity:0; transform: translateY(6px); }
+        to{ opacity:1; transform: translateY(0); }
+    }
+    .row.me{ align-self:flex-end; align-items:flex-end; }
+    .row.bot{ align-self:flex-start; align-items:flex-start; }
+ 
+    .timecode{
+        font-family:'JetBrains Mono', monospace;
+        font-size: 10.5px;
+        color: var(--text-faint);
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+    }
+ 
+    .bubble{
+        padding: 11px 14px;
+        border-radius: 10px;
+        font-size: 14.5px;
+        line-height:1.45;
+        word-wrap:break-word;
+    }
+    .row.me .bubble{
+        background: var(--accent-2);
+        color: #06231a;
+        border-bottom-right-radius: 3px;
+    }
+    .row.bot .bubble{
+        background: #232833;
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-bottom-left-radius: 3px;
+    }
+    .row.bot .bubble.thinking{
+        color: var(--text-muted);
+        font-style: italic;
+    }
+ 
+    .dots span{
+        display:inline-block;
+        width:5px; height:5px;
+        border-radius:50%;
+        background: var(--text-muted);
+        margin-right:3px;
+        animation: blink 1.2s infinite;
+    }
+    .dots span:nth-child(2){ animation-delay:.2s; }
+    .dots span:nth-child(3){ animation-delay:.4s; }
+    @keyframes blink{ 0%,80%,100%{opacity:.25;} 40%{opacity:1;} }
+ 
+    /* ---- Ask row ---- */
+    .input-area{
+        display:flex;
+        gap:10px;
+    }
+    .input-area input{
+        flex:1;
+        min-width:0;
+        padding: 14px 16px;
+        font-size: 14.5px;
+        border-radius: 9px;
+        border: 1px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
+    }
+    .input-area input::placeholder{ color: var(--text-faint); }
+    .input-area input:focus-visible{
+        outline:none;
+        border-color: var(--accent-2);
+        box-shadow: 0 0 0 3px rgba(61,220,151,0.16);
+    }
+    .input-area input:disabled{ opacity: 0.5; }
+ 
+    @media (max-width: 560px){
+        .container{ padding: 24px 18px 20px; }
+        h1{ font-size: 32px; }
+        .chat-box{ height: 360px; }
+        .row{ max-width: 90%; }
+    }
+ 
+    @media (prefers-reduced-motion: reduce){
+        *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="frame">
+    <div class="sprockets" aria-hidden="true"></div>
+ 
+    <div class="container">
+        <div class="marquee" aria-hidden="true">
+            <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span>
+            <span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span>
+            <span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span>
+            <span style="--i:9"></span><span style="--i:10"></span><span style="--i:11"></span>
+        </div>
+        <div class="masthead">
+            <h1>Transcript</h1>
+            <span class="live-dot" aria-hidden="true"></span>
+        </div>
+        <p class="tagline">Ask a YouTube video anything. Answers come only from what's actually said.</p>
+ 
+        <div class="video-box">
+            <input
+                type="text"
+                id="videoUrl"
+                placeholder="Paste a YouTube URL…"
+                aria-label="YouTube URL"
+                autocomplete="off">
+            <button class="btn btn-load" id="loadBtn" onclick="loadVideo()">Load video</button>
+        </div>
+ 
+        <div id="status-row"></div>
+ 
+        <div class="chat-box" id="chatBox" role="log" aria-live="polite"></div>
+ 
+        <div class="input-area">
+            <input
+                type="text"
+                id="question"
+                placeholder="Load a video first…"
+                aria-label="Ask a question about the video"
+                autocomplete="off"
+                disabled>
+            <button class="btn btn-send" id="sendBtn" onclick="askQuestion()" disabled>Send</button>
+        </div>
+    </div>
+</div>
+<script>
+ const statusRow = document.getElementById("status-row");
+    const chatBox   = document.getElementById("chatBox");
+    const questionInput = document.getElementById("question");
+    const sendBtn   = document.getElementById("sendBtn");
+    const loadBtn   = document.getElementById("loadBtn");
+    const urlInput  = document.getElementById("videoUrl");
+ 
+    function escapeHtml(str){
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+    }
+ 
+    function timeNow(){
+        const d = new Date();
+        return d.toTimeString().slice(0,8);
+    }
+ 
+    function extractVideoId(url){
+        const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+        return match ? match[1] : null;
+    }
+ 
+    function setStatus(html, kind){
+        statusRow.innerHTML = `<div class="status-line ${kind || ''}">${html}</div>`;
+    }
+ 
+    async function loadVideo(){
+        const url = urlInput.value.trim();
+        if(!url){
+            setStatus("Paste a YouTube URL first.", "err");
+            return;
+        }
+ 
+        loadBtn.disabled = true;
+        urlInput.disabled = true;
+        setStatus('<span class="reel"></span> Reading transcript & building the index…');
+ 
+        try{
+            const response = await fetch("/load_video", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: url })
+            });
+ 
+            const data = await response.json();
+ 
+            if(data.message){
+                const videoId = extractVideoId(url);
+                const thumb = videoId
+                    ? `<img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" alt="Video thumbnail">`
+                    : "";
+                setStatus(`<div class="thumb">${thumb}<span>✓ ${escapeHtml(data.message)}</span></div>`, "ok");
+ 
+                questionInput.disabled = false;
+                sendBtn.disabled = false;
+                questionInput.placeholder = "Ask anything about the video…";
+                questionInput.focus();
+            } else {
+                setStatus(`✕ ${escapeHtml(data.error || "Could not load that video.")}`, "err");
+            }
+        } catch(e){
+            setStatus("✕ Couldn't reach the server. Is it running?", "err");
+        } finally {
+            loadBtn.disabled = false;
+            urlInput.disabled = false;
+        }
+    }
+ 
+    function addRow(kind, text, isThinking){
+        const row = document.createElement("div");
+        row.className = "row " + kind;
+ 
+        const tc = document.createElement("div");
+        tc.className = "timecode";
+        tc.textContent = timeNow();
+ 
+        const bubble = document.createElement("div");
+        bubble.className = "bubble" + (isThinking ? " thinking" : "");
+ 
+        if(isThinking){
+            bubble.innerHTML = 'Thinking<span class="dots"><span></span><span></span><span></span></span>';
+        } else {
+            bubble.innerHTML = escapeHtml(text).replace(/\n/g, "<br>");
+        }
+ 
+        row.appendChild(tc);
+        row.appendChild(bubble);
+        chatBox.appendChild(row);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return bubble;
+    }
+ 
+    async function askQuestion(){
+        const question = questionInput.value.trim();
+        if(!question) return;
+ 
+        addRow("me", question);
+        questionInput.value = "";
+        questionInput.disabled = true;
+        sendBtn.disabled = true;
+ 
+        const thinkingBubble = addRow("bot", "", true);
+ 
+        try{
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: question })
+            });
+ 
+            const data = await response.json();
+            thinkingBubble.classList.remove("thinking");
+            thinkingBubble.innerHTML = escapeHtml(data.answer || "No answer came back.").replace(/\n/g, "<br>");
+        } catch(e){
+            thinkingBubble.classList.remove("thinking");
+            thinkingBubble.textContent = "Couldn't reach the server. Try again.";
+        } finally {
+            questionInput.disabled = false;
+            sendBtn.disabled = false;
+            questionInput.focus();
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    }
+ 
+    urlInput.addEventListener("keydown", (e) => {
+        if(e.key === "Enter"){ e.preventDefault(); loadVideo(); }
+    });
+    questionInput.addEventListener("keydown", (e) => {
+        if(e.key === "Enter"){ e.preventDefault(); askQuestion(); }
+    });
+</script>
+
+</body>
+
+</html>
