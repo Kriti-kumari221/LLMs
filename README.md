@@ -237,7 +237,7 @@ Generated Answer
 
 ---
 
-# 🛠 Technologies Used
+#  Technologies Used
 
 - Python
 - LangChain
@@ -313,16 +313,6 @@ Through this repository, I gained practical experience with:
 - Ollama Integration
 - Llama 3
 - Multi-modal AI
-
----
-
-#  Author
-
-**Your Name**
-
-B.Tech CSE (AI & ML)
-
-Lovely Professional University
 
 ---
 
